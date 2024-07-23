@@ -14,21 +14,20 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  display_name String
-  avatarUrl    String?
-  email        String   @unique
-  followers    Int?     @default(0)
-  isPremium    Boolean  @default(false)
-  accessToken  String
-  refreshToken String
-  created_at   DateTime @default(now())
-
-  friendRequests FriendRequest[] @relation("FriendRequestFrom")
-  friendReceives FriendRequest[] @relation("FriendRequestTo")
-
-  messagesSent     Message[] @relation("SentMessages")
-  messagesReceived Message[] @relation("ReceivedMessages")
+  id               Int             @id @default(autoincrement())
+  display_name     String
+  avatarUrl        String?
+  email            String          @unique
+  followers        Int?            @default(0)
+  isPremium        Boolean         @default(false)
+  accessToken      String
+  refreshToken     String
+  artists          Json
+  friendRequests   FriendRequest[] @relation("FriendRequestFrom")
+  friendReceives   FriendRequest[] @relation("FriendRequestTo")
+  messagesSent     Message[]       @relation("SentMessages")
+  messagesReceived Message[]       @relation("ReceivedMessages")
+  created_at       DateTime        @default(now())
 }
 
 model Message {
