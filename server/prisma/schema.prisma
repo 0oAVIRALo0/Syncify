@@ -22,7 +22,7 @@ model User {
   isPremium        Boolean         @default(false)
   accessToken      String
   refreshToken     String
-  artists          Json
+  artists          Json?
   friendRequests   FriendRequest[] @relation("FriendRequestFrom")
   friendReceives   FriendRequest[] @relation("FriendRequestTo")
   messagesSent     Message[]       @relation("SentMessages")
