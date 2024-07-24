@@ -5,19 +5,23 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.mjs"
+    "start": "nodemon index.mjs",
+    "prisma:migrate": "prisma migrate dev --name schema_initialisation"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/adapter-pg": "^5.17.0",
     "@prisma/client": "^5.17.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
     "prisma": "^5.17.0",
     "socket.io": "^4.7.5",
     "spotify-web-api-node": "^5.0.2"
