@@ -37,7 +37,7 @@ const callback = asyncHandler(async (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
 
-  // console.log("Authorization code:", code);
+  console.log("Authorization code:", code);
 
   if (state === null) {
     res.redirect(
