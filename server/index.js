@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-import express from "express";
-const app = express();
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
 
-import { createServer } from "http";
-import { Server } from "socket.io";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import userRouter from "./src/routes/user.routes.js";
+const app = express();
 
 app.use(
   cors({
@@ -21,6 +21,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 const PORT = process.env.PORT || 3000;
 
@@ -39,6 +40,8 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
+
+const userRouter = require("./src/router/user.router.js");
 
 app.use("/api/v1/users", userRouter);
 

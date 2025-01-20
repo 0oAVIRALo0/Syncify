@@ -7,4 +7,4 @@ class responseHandler {
   }
 }
 
-export { responseHandler };
+module.exports = responseHandler;

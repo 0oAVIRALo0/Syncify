@@ -20,4 +20,4 @@ class errorHandler extends Error {
   }
 }
 
-export { errorHandler };
+module.exports = errorHandler;
