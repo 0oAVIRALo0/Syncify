@@ -10,12 +10,13 @@ const passport = require("passport");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  })
-);
+app.use(cors());
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN,
+//     credentials: true,
+//   })
+// );
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
@@ -31,14 +32,18 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   console.log(`User connected with socketId: ${socket.id}`);
 
-  socket.on("client", (args) => {
-    console.log(args);
-    socket.emit("client", "Welcome!");
+  socket.on("new message", (data) => {
+    console.log("Message received:", data);
+    socket.broadcast.emit("new message", "Welcome!");
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
+
+  socket.on("send friend request", (data) => { 
+    
+  })
 });
 
 const userRouter = require("./src/router/user.router.js");
