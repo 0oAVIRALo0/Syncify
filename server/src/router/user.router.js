@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
 require("../auth/spotify");
+const { dashboard } = require("../controllers/user.controller");
 
 const router = new Router();
 
@@ -20,5 +21,7 @@ router.get(
     session: false,
   })
 );
+
+router.get("/dashboard", dashboard);
 
 module.exports = router;

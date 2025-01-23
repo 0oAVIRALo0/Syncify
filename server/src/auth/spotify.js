@@ -10,6 +10,7 @@ passport.use(
       callbackURL: process.env.SPOTIFY_REDIRECT_URI,
     },
     async function (accessToken, refreshToken, expires_in, profile, done) {
+      console.log("Profile:", profile);
       try {
         let user = await prisma.user.findUnique({
           where: {
@@ -29,7 +30,7 @@ passport.use(
           await prisma.profile.create({
             data: {
               userId: user.id,
-              spotifyFollowers: profile.followers.total, // Adjusted to use `profile.followers.total`
+              spotifyFollowers: profile.followers,
               location: profile.country,
             },
           });
@@ -39,11 +40,9 @@ passport.use(
               userId: user.id,
               accessToken: accessToken,
               refreshToken: refreshToken,
-              expiresAt: Date(expires_in * 1000),
             },
           });
         } else {
-          // If the user already exists, update their tokens
           await prisma.tokens.upsert({
             where: {
               userId: user.id,
@@ -51,18 +50,15 @@ passport.use(
             update: {
               accessToken: accessToken,
               refreshToken: refreshToken,
-              expiresAt: Date(expires_in * 1000),
             },
-            // create: {
-            //   userId: user.id,
-            //   accessToken: accessToken,
-            //   refreshToken: refreshToken,
-            //   expiresAt: Date.now() + expires_in * 1000,
-            // },
+            create: {
+              userId: user.id,
+              accessToken: accessToken,
+              refreshToken: refreshToken,
+            },
           });
         }
 
-        // Return the user object after authentication is successful
         return done(null, user);
       } catch (error) {
         console.error("Error during Spotify authentication:", error);
