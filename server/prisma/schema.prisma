@@ -14,52 +14,43 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  spotifyId    String   @unique
-  displayName String
-  avatarUrl    String?
-  email        String   @unique
-  profile      Profile?  
-  tokens       Tokens?   
-  created_at   DateTime @default(now())
+  id                     Int             @id @default(autoincrement())
+  spotifyId              String          @unique
+  displayName            String
+  avatarUrl              String?
+  email                  String          @unique
+  profile                Profile?
+  tokens                 Tokens?
+  friendRequestsSent     FriendRequest[] @relation("SenderRequests")
+  friendRequestsReceived FriendRequest[] @relation("ReceiverRequests")
+  created_at             DateTime        @default(now())
 }
 
 model Profile {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int     @unique
-  bio       String?
-  location  String?
-  spotifyFollowers Int?    @default(0)
-  isPremium Boolean? @default(false)
+  id               Int      @id @default(autoincrement())
+  user             User     @relation(fields: [userId], references: [id])
+  userId           Int      @unique
+  bio              String?
+  location         String?
+  spotifyFollowers Int?     @default(0)
+  isPremium        Boolean? @default(false)
 }
 
 model Tokens {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [userId], references: [id])
-  userId       Int      @unique
+  id           Int    @id @default(autoincrement())
+  user         User   @relation(fields: [userId], references: [id])
+  userId       Int    @unique
   accessToken  String
   refreshToken String
-  expiresAt    DateTime
 }
 
-// model Message {
-//   id         Int      @id @default(autoincrement())
-//   fromId     Int
-//   toId       Int
-//   from       User     @relation("SentMessages", fields: [fromId], references: [id])
-//   to         User     @relation("ReceivedMessages", fields: [toId], references: [id])
-//   message    String
-//   created_at DateTime @default(now())
-// }
+model FriendRequest {
+  id         Int    @id @default(autoincrement())
+  sender     User   @relation("SenderRequests", fields: [senderId], references: [id])
+  receiver   User   @relation("ReceiverRequests", fields: [receiverId], references: [id])
+  senderId   Int
+  receiverId Int
+  status     String @default("pending")
 
-// model FriendRequest {
-//   id         Int      @id @default(autoincrement())
-//   fromId     Int
-//   toId       Int
-//   from       User     @relation("FriendRequestFrom", fields: [fromId], references: [id])
-//   to         User     @relation("FriendRequestTo", fields: [toId], references: [id])
-//   created_at DateTime @default(now())
-
-//   @@unique([fromId, toId])
-// }
+  @@unique([senderId, receiverId])
+}
